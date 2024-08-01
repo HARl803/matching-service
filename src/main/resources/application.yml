@@ -16,4 +16,4 @@ spring:
     hibernate:
       ddl-auto: create
   application:
-    name: auth-service
+    name: matching-service
