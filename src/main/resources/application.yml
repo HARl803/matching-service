@@ -6,6 +6,9 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     url: ${SPRING_DATASOURCE_URL}
     password: ${SPRING_DATASOURCE_PASSWORD}
+data:
+  mongodb:
+    uri: mongodb://ssafy:ssafy@i11a803.p.ssafy.io:27017/haribo?authSource=admin
   jpa:
     properties:
       hibernate:
