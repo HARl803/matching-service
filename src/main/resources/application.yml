@@ -19,8 +19,7 @@ data:
     hibernate:
       ddl-auto: update
   application:
-    name: auth-service
-
+    name: matching-service
 
 server:
   port : ${SERVER_PORT}
