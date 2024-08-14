@@ -6,14 +6,24 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     url: ${SPRING_DATASOURCE_URL}
     password: ${SPRING_DATASOURCE_PASSWORD}
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: 'true'
-        use_sql_comments: 'true'
-        show_sql: 'true'
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}
+
+jpa:
+  properties:
     hibernate:
-      ddl-auto: create
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: 'true'
+      use_sql_comments: 'true'
+      show_sql: 'true'
+  hibernate:
+    ddl-auto: ${DDL_AUTO}
   application:
-    name: matching-service
+    name: ${APPLICATION_NAME}
+
+server:
+  port : ${SERVER_PORT}
+
+base:
+  login-member-url : http://localhost:8080/api/v1/auth/profile
