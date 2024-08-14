@@ -6,21 +6,21 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     url: ${SPRING_DATASOURCE_URL}
     password: ${SPRING_DATASOURCE_PASSWORD}
-data:
-  mongodb:
-    uri: ${MONGODB_URI}
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: 'true'
-        use_sql_comments: 'true'
-        show_sql: 'true'
-    hibernate:
-      ddl-auto: update
-  application:
-    name: auth-service
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}
 
+jpa:
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: 'true'
+      use_sql_comments: 'true'
+      show_sql: 'true'
+  hibernate:
+    ddl-auto: ${DDL_AUTO}
+  application:
+    name: ${APPLICATION_NAME}
 
 server:
   port : ${SERVER_PORT}
