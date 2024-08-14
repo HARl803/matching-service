@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,8 @@ public class MenteeServiceImpl implements MenteeService{
     private final ReservationRepository reservationRepository;
     private final MongoTemplate mongoTemplate;
 
-    private final String loginMemberUrl = "http://localhost:8080/api/v1/auth/profile";
+    @Value("${base.login-member-url}")
+    private String loginMemberUrl;
 
     private static final Logger logger = LoggerFactory.getLogger(MenteeServiceImpl.class);
     @Override
