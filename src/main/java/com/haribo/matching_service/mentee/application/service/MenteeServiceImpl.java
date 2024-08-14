@@ -6,15 +6,16 @@ import com.haribo.matching_service.mentee.domain.ReservationDocs;
 import com.haribo.matching_service.mentee.domain.repository.ReservationDocsRepository;
 import com.haribo.matching_service.mentee.domain.repository.ReservationRepository;
 import com.haribo.matching_service.mentee.presentation.request.MenteePossiRequest;
-import com.haribo.matching_service.mentee.presentation.response.ProfileMemberResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 public class MenteeServiceImpl implements MenteeService{
     private final ReservationDocsRepository reservationDocsRepository;
     private final ReservationRepository reservationRepository;
+    private final MongoTemplate mongoTemplate;
 
     private final String loginMemberUrl = "http://localhost:8080/api/v1/auth/profile";
 
@@ -30,8 +32,8 @@ public class MenteeServiceImpl implements MenteeService{
     public void createReservation(MenteePossiRequest menteePossiRequest) {
 
         logger.info("1. 로그인한 사용자 아이디를 가져온다.");
-        RestTemplate restTemplate = new RestTemplate();
-        ProfileMemberResponse profileMemberResponse = restTemplate.getForObject(loginMemberUrl, ProfileMemberResponse.class);
+        // RestTemplate restTemplate = new RestTemplate();
+        // ProfileMemberResponse profileMemberResponse = restTemplate.getForObject(loginMemberUrl, ProfileMemberResponse.class);
 
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.add("Cookie", "JSESSIONID=11CD4A2080E246997063A5AE2207E99C");
@@ -47,8 +49,9 @@ public class MenteeServiceImpl implements MenteeService{
 //        ProfileMemberResponse profileMemberResponse = response.getBody();
 
         logger.info("1-1. 꺄아");
-        assert profileMemberResponse != null;
-        String menteeId = profileMemberResponse.getProfileMember().getProfileId();
+        // assert profileMemberResponse != null;
+        // String menteeId = profileMemberResponse.getProfileMember().getProfileId();
+        String menteeId = "e5eb8557-729d-4e35-9782-c8219f6f1bbe";
         Reservation reservation = Reservation.builder()
                 .mentoId(menteePossiRequest.getMentorId())
                 .menteeId(menteeId)
@@ -61,6 +64,7 @@ public class MenteeServiceImpl implements MenteeService{
 
         logger.info("3. 저장한 예약 아이디를 가져온다.");
         Integer reservationId = savedReservation.getReservationId();
+        logger.info("3-1. "+reservationId);
 
         logger.info("4. NoSQL에 저장한다. (reservationId, mentorId, status, request 알고있음)");
         ReservationDocs.MenteeAvailableTimes menteeAvailableTimes = ReservationDocs.MenteeAvailableTimes
@@ -69,19 +73,27 @@ public class MenteeServiceImpl implements MenteeService{
                 .possibleStartTimes(menteePossiRequest.getPossibleStartTime())
                 .build();
 
-        ReservationDocs.Log log = ReservationDocs.Log
-                .builder()
-                .status(ReservationStatus.RESERVATION_PENDING)
-                .memberId(menteeId)
-                .creationDate(LocalDateTime.now())
-                .build();
+        Map<String, ReservationDocs.MenteeAvailableTimes> menteeAvailableTimesMap = Map.of( UUID.randomUUID().toString(), menteeAvailableTimes);
 
+        logger.info("4-1. "+ menteeAvailableTimes.toString());
+        ReservationDocs.Log log = ReservationDocs.Log.from(ReservationStatus.RESERVATION_PENDING, menteeId, LocalDateTime.now());
+
+        Map<String, ReservationDocs.Log> logMap = Map.of( UUID.randomUUID().toString(), log);
+
+        logger.info("4-2. "+ log.toString());
         ReservationDocs complete = ReservationDocs
                 .builder()
                 .reservationId(reservationId)
-                .menteeAvailableTimes(menteeAvailableTimes)
-                .log(log)
+                .menteeAvailableTimes(menteeAvailableTimesMap)
+                .log(logMap)
                 .build();
-        reservationDocsRepository.save(complete);
+
+        logger.info("4-3. "+ complete.toString());
+
+        logger.info("Current MongoDB Database: " + mongoTemplate.getDb().getName());
+        ReservationDocs savedDocs = reservationDocsRepository.save(complete);
+        logger.info("Saved ReservationDocs: " + savedDocs.toString());
+
+        logger.info("4-4. "+ savedDocs.toString());
     }
 }
