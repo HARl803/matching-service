@@ -8,7 +8,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
 data:
   mongodb:
-    uri: mongodb://ssafy:ssafy@i11a803.p.ssafy.io:27017/haribo?authSource=admin
+    uri: ${MONGODB_URI}
   jpa:
     properties:
       hibernate:
@@ -17,6 +17,10 @@ data:
         use_sql_comments: 'true'
         show_sql: 'true'
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   application:
     name: auth-service
+
+
+server:
+  port : ${SERVER_PORT}

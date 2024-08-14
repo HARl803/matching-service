@@ -1,27 +1,47 @@
 package com.haribo.matching_service.mentee.domain;
 
+import com.haribo.matching_service.global.enums.ReservationStatus;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Document(collection = "reservation")
+@Builder
+@Getter
 public class ReservationDocs {
-
     @Id
-    private String reservationId;
-    private Mento mentoAvailable;
-    private Mentee menteeAvailable;
+    private String id;
+    private Integer reservationId;
+    private MenteeAvailableTimes menteeAvailableTimes;
+    private Log log;
+    private Review review;
 
-    public static class Mento {
-        private String mentoId;
+    @Getter
+    @Builder
+    public static class MenteeAvailableTimes {
+        private String menteeId;
         private List<String> possibleStartTimes;
     }
 
-    public static class Mentee {
-        private String menteeId;
-        private List<String> possibleStartTimes;
-        private String pcId;
-        private String symptom;
+    @Getter
+    @Builder
+    public static class Log {
+        private String memberId;
+        private ReservationStatus status;
+        private LocalDateTime creationDate;
+    }
+
+    @Getter
+    @Builder
+    public static class Review {
+        private String star;
+        private String content;
+        private LocalDateTime createdDate;
     }
 }
