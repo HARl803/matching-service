@@ -75,12 +75,12 @@ public class MenteeServiceImpl implements MenteeService{
                 .possibleStartTimes(menteePossiRequest.getPossibleStartTime())
                 .build();
 
-        Map<String, ReservationDocs.MenteeAvailableTimes> menteeAvailableTimesMap = Map.of( UUID.randomUUID().toString(), menteeAvailableTimes);
+        Map<String, ReservationDocs.MenteeAvailableTimes> menteeAvailableTimesMap = Map.of(UUID.randomUUID().toString(), menteeAvailableTimes);
 
         logger.info("4-1. "+ menteeAvailableTimes.toString());
         ReservationDocs.Log log = ReservationDocs.Log.from(ReservationStatus.RESERVATION_PENDING, menteeId, LocalDateTime.now());
 
-        Map<String, ReservationDocs.Log> logMap = Map.of( UUID.randomUUID().toString(), log);
+        Map<String, ReservationDocs.Log> logMap = Map.of(UUID.randomUUID().toString(), log);
 
         logger.info("4-2. "+ log.toString());
         ReservationDocs complete = ReservationDocs

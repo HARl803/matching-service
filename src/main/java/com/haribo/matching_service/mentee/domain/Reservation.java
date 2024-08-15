@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "reservation")
 public class Reservation extends BaseTimeEntity{
@@ -28,5 +28,6 @@ public class Reservation extends BaseTimeEntity{
     @Column(name = "status", nullable = false)
     private ReservationStatus status;
 
+    @Column(name = "request", nullable = false)
     private String request;
 }

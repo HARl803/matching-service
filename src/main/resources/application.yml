@@ -8,7 +8,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   data:
     mongodb:
-      uri: mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}
+      uri: mongodb://ssafy:ssafy@i11a803.p.ssafy.io:27017/haribo?authSource=admin
 
 jpa:
   properties:
