@@ -1,8 +1,7 @@
 package com.haribo.matching_service.mentee.domain;
 
 import com.haribo.matching_service.global.enums.ReservationStatus;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -14,17 +13,10 @@ import java.util.Map;
 @Builder
 @Getter
 @Document(collection = "reservation")
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 public class ReservationDocs {
-    @Override
-    public String toString() {
-        return "ReservationDocs{" +
-                "id='" + id + '\'' +
-                ", reservationId=" + reservationId +
-                ", menteeAvailableTimes=" + menteeAvailableTimes +
-                ", log=" + log +
-                ", review=" + review +
-                '}';
-    }
 
     @Id
     private String id;
@@ -36,10 +28,24 @@ public class ReservationDocs {
     private Map<String,MenteeAvailableTimes> menteeAvailableTimes;
 
     private Map<String,Log> log;
+
     private Review review;
+
+    @Override
+    public String toString() {
+        return "ReservationDocs{" +
+                "id='" + id + '\'' +
+                ", reservationId=" + reservationId +
+                ", menteeAvailableTimes=" + menteeAvailableTimes +
+                ", log=" + log +
+                ", review=" + review +
+                '}';
+    }
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class MenteeAvailableTimes {
 
         @Field("mentee_id")
@@ -59,9 +65,9 @@ public class ReservationDocs {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Log {
-//        @Field("num")
-//        private String num;
 
         @Field("member_id")
         private String memberId;
@@ -69,13 +75,13 @@ public class ReservationDocs {
         private String status;
 
         @Field("creation_date")
-        private LocalDateTime creationDate;
+        private String creationDate;
 
         public static Log from(ReservationStatus status, String memberId, LocalDateTime creationDate) {
             return Log.builder()
                     .status(status.getKorean())
                     .memberId(memberId)
-                    .creationDate(creationDate)
+                    .creationDate(String.valueOf(creationDate))
                     .build();
         }
 
@@ -91,6 +97,8 @@ public class ReservationDocs {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Review {
         private String star;
         private String content;
